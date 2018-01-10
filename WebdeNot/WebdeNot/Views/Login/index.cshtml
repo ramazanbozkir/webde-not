@@ -1,0 +1,120 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div>
+        <div class="container">
+            <!--  giriş formu  -->
+            <div class="row" >
+            <div class="col-sm-12 col-md-5 col-xs-12 col-lg-5">
+                <h2 class="form-signin-heading">Log in</h2>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input id="inputEmail" class="form-control" placeholder="Email address" type="text">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input id="inputPassword" class="form-control" placeholder="Password" required="" type="password">
+                <button class="btn btn-lg btn-primary btn-block" id="btnLogin">Login</button>
+            </div>
+
+
+            <!--  kayıt formu  -->
+            <div class="col-sm-12 col-md-5 col-xs-12 col-lg-5">
+                <h2 class="form-signin-heading">Sign in</h2>
+
+                <label class="sr-only">Name</label>
+                <input id="inputName" class="form-control" placeholder="Name" type="text">
+                <label class="sr-only">Surname</label>
+                <input id="inputSurName" class="form-control" placeholder="Surname" type="text">
+                <label class="sr-only">Date Of Birth </label>
+                <input id="inputDateofbirth" class="form-control" placeholder="Date of Birth" type="date">
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input id="inputEmail1" class="form-control" placeholder="Email address" type="text">
+                <label class="sr-only">Nickname</label>
+                <input id="inputNickname" class="form-control" placeholder="Nickname" type="text">
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input id="inputPassword1" class="form-control" placeholder="Password" required="" type="password">
+                <label for="inputPassword" class="sr-only">Invalid Password</label>
+                <input id="inputInvalidPassword" class="form-control" placeholder="Invalid Password" required="" type="password">
+                <button class="btn btn-lg btn-primary btn-block" id="btnSignUp">Sign Up</button>
+            </div>
+            </div>
+
+             
+                
+            <script> 
+                function setCookie(cname, cvalue, exdays) {
+                    var d = new Date();
+                    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                    var expires = "expires=" + d.toUTCString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                }
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var decodedCookie = decodeURIComponent(document.cookie);
+                    var ca = decodedCookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1);
+                        }
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length, c.length);
+                        }
+                    }
+                    return "";
+                }
+
+                $(document).ready(function () {
+                    $("#btnLogin").click(function () {
+                        console.log("1")
+                        $.post("http://localhost:49193/Home/Login",
+                            {
+                                nickname: $("#inputEmail").val(),
+                                pass: $("#inputPassword").val()
+                            },
+                            function (data, status) {
+                                alert("Hoşgeldiniz.. " + data.Name + " " + data.Surname);
+                                if (data != null) {
+                                    window.location = "/";
+                                    setCookie("UserID", data.ID, 30);
+                                    setCookie("UserName", data.Name, 30);
+                                    setCookie("UserSurname", data.Surname, 30);
+                                    setCookie("UserPhoto", data.Photo, 30);
+                                    setCookie("UserEmail", data.Email, 30);
+                                    setCookie("UserNickname", data.Nickname, 30);
+                                }
+                            });
+                    });
+                    $("#btnSignUp").click(function () {
+                            $.post("http://localhost:49193/Home/Signup",
+                                {
+                                    Name: $("#inputName").val(),
+                                    Surname: $("#inputSurName").val(),
+                                    BirtDate: $("#inputDateofbirth").val(),
+                                    Nickname: $("#inputNickname").val(),
+                                    Email: $("#inputEmail1").val(),
+                                    Password: $("#inputPassword1").val()
+
+                                },
+                                function (data, status) {
+                                    alert(data);
+                                });
+
+                        
+
+                    });
+                });
+
+            </script>
+        </div>
+    </div>
+</body>
+</html>
